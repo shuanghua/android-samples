@@ -2,50 +2,72 @@ package com.shuanghua.retrofit
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Observer
 import com.shuanghua.retrofit.bean.GithubRepo
 import com.shuanghua.retrofit.bean.TouTiao
-import com.shuanghua.retrofit.network.ApiFactory
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import com.shuanghua.retrofit.network.NetWorkData
+import com.shuanghua.retrofit.network.ResultJava
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(),
+    NetWorkData<List<GithubRepo>> {
+    private val useRetrofit = DataRepository()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
         getTouTiao()
+        getTouTiaoLiveData()
         getGitHubRepo()
     }
 
     private fun getTouTiao() {
-        val toutiaoCall =
-            ApiFactory.getTouTiaoApi().getTouTiaoData("top", "a1a755458cc22f129942b34904feb820")
-        toutiaoCall.enqueue(object : Callback<TouTiao> {
-            override fun onFailure(call: Call<TouTiao>, t: Throwable) {
-                println("onError:toutiaoCall-> ${t.message}")
+        Thread(Runnable {
+            val result = useRetrofit.touTiaoData
+            when (result) {
+                is ResultJava.Success -> showTouTiao(result.data)
+                is ResultJava.Error -> println("出现错误！！")
             }
+        }).start()
+    }
 
-            override fun onResponse(call: Call<TouTiao>, response: Response<TouTiao>) {
-                println("toutiao-> ${response.body()?.reason}")
+    /**
+     * LiveData
+     */
+    private fun getTouTiaoLiveData() {
+        useRetrofit.touTiaoLiveData.observe(this, Observer { result ->
+            if (result != null) {
+                when (result) {
+                    is ResultJava.Success -> showTouTiao(result.data)
+                    is ResultJava.Error -> println("出现错误！！")
+                }
             }
         })
     }
 
+    //接口回调获取数据
     private fun getGitHubRepo() {
-        val githubCall = ApiFactory.getGitHubApi().getGitHubRepoData("shuanghua")
-        githubCall.enqueue(object : Callback<List<GithubRepo>> {
-            override fun onFailure(call: Call<List<GithubRepo>>, t: Throwable) {
-                println("onError:githubCall-> ${t.message}")
+        useRetrofit.getGitHubData("shuanghua", this)
+    }
 
-            }
+    //----------------------------------------------------------------------------------------------
 
-            override fun onResponse(
-                call: Call<List<GithubRepo>>,
-                response: Response<List<GithubRepo>>
-            ) {
-                println("github-> ${response.body()?.get(0)?.name}")
-            }
-        })
+    override fun success(result: List<GithubRepo>?) {
+        if (result != null) showGitHub(result)
+    }
+
+    override fun error(e: Exception?, data: List<GithubRepo>?) {
+        //toast("数据获取出现错误！！")
+        println("orror->${e?.message}")
+    }
+
+    private fun showTouTiao(toutiao: TouTiao) {
+        // setAdapter(toutiao)
+        println("toutiao->${toutiao.result.data[1].title}")
+    }
+
+    private fun showGitHub(githubs: List<GithubRepo>) {
+        // setAdapter(githubs)
+        println("github->${githubs[1].name}")
     }
 }
