@@ -1,6 +1,6 @@
 package com.shuanghua.retrofit.network;
 
-public interface NetWorkData<T> {
+public interface NetWorkResult<T> {
     void success(T result);
 
     void error(Exception e, T data);

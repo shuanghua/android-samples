@@ -3,10 +3,10 @@ package com.shuanghua.retrofit;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
-import com.shuanghua.retrofit.bean.GithubRepo;
-import com.shuanghua.retrofit.bean.TouTiao;
+import com.shuanghua.retrofit.github.GithubRepo;
+import com.shuanghua.retrofit.toutiao.TouTiao;
 import com.shuanghua.retrofit.network.ApiFactory;
-import com.shuanghua.retrofit.network.NetWorkData;
+import com.shuanghua.retrofit.network.NetWorkResult;
 import com.shuanghua.retrofit.network.ResultJava;
 
 import org.jetbrains.annotations.NotNull;
@@ -44,14 +44,14 @@ class DataRepository {
     /**
      * 接口回调获取数据的封装
      */
-    public void getGitHubData(String user, NetWorkData<List<GithubRepo>> netWorkData) {
+    public void getGitHubData(String user, NetWorkResult<List<GithubRepo>> netWorkResult) {
         Call<List<GithubRepo>> call = ApiFactory.getGitHubApi().getGitHubRepoData(user);
         call.enqueue(new Callback<List<GithubRepo>>() {
             @Override
             public void onResponse(@NotNull Call<List<GithubRepo>> call, @NotNull Response<List<GithubRepo>> response) {
                 if (response.isSuccessful()) {
-                    if (netWorkData != null) {
-                        netWorkData.success(response.body());
+                    if (netWorkResult != null) {
+                        netWorkResult.success(response.body());
                     }
                 }
             }
@@ -59,7 +59,7 @@ class DataRepository {
             @Override
             public void onFailure(@NotNull Call<List<GithubRepo>> call, @NotNull Throwable t) {
                 // 网络请求失败，可用别的数据替代 null
-                netWorkData.error(new Exception(t.getMessage()), null);
+                netWorkResult.error(new Exception(t.getMessage()), null);
             }
         });
     }

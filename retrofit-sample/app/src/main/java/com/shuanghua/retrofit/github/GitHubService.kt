@@ -1,6 +1,6 @@
-package com.shuanghua.retrofit.network
+package com.shuanghua.retrofit.github
 
-import com.shuanghua.retrofit.bean.GithubRepo
+import com.shuanghua.retrofit.github.GithubRepo
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Path

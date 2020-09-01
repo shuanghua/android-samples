@@ -1,5 +1,8 @@
 package com.shuanghua.retrofit.network;
 
+import com.shuanghua.retrofit.github.GitHubService;
+import com.shuanghua.retrofit.toutiao.TouTiaoService;
+
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 

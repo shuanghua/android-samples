@@ -1,0 +1,26 @@
+﻿{
+  "hostSearch": [
+    {
+      "advertImg": "",
+      "advertType": "html5",
+      "advertParam": "546456546",
+      "advertTargetId": "",
+      "advertSecondTargetId": "",
+      "advertExtend": {},
+      "advertStyle": "",
+      "advertTitle": "54645645645645645",
+      "advertTable": "search_word",
+      "advertShowNavTitle": "",
+      "id": 74,
+      "keyword": "54645645645645645",
+      "image": "",
+      "searchWordSpecialStyle": {
+        "fontColor": "#D92B3A",
+        "fontColorClarity": 100.0,
+        "backgroundColor": "#1AD92B3A",
+        "backgroundColorClarity": 0.1
+      }
+    }
+  ]
+}
+

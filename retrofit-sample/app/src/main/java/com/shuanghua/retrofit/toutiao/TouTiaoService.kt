@@ -1,6 +1,6 @@
-package com.shuanghua.retrofit.network
+package com.shuanghua.retrofit.toutiao
 
-import com.shuanghua.retrofit.bean.TouTiao
+import com.shuanghua.retrofit.toutiao.TouTiao
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Query

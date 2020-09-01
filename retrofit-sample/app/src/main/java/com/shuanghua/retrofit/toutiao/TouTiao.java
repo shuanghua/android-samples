@@ -1,4 +1,4 @@
-package com.shuanghua.retrofit.bean;
+package com.shuanghua.retrofit.toutiao;
 
 import java.util.List;
 

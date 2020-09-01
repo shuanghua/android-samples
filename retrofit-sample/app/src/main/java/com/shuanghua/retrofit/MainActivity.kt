@@ -3,22 +3,34 @@ package com.shuanghua.retrofit
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
-import com.shuanghua.retrofit.bean.GithubRepo
-import com.shuanghua.retrofit.bean.TouTiao
-import com.shuanghua.retrofit.network.NetWorkData
+import com.google.gson.Gson
+import com.shuanghua.retrofit.bean.TestBean
+import com.shuanghua.retrofit.github.GithubRepo
+import com.shuanghua.retrofit.network.NetWorkResult
 import com.shuanghua.retrofit.network.ResultJava
+import com.shuanghua.retrofit.toutiao.TouTiao
 
-class MainActivity : AppCompatActivity(),
-    NetWorkData<List<GithubRepo>> {
+class MainActivity : AppCompatActivity(), NetWorkResult<List<GithubRepo>> {
     private val useRetrofit = DataRepository()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        getTouTiao()
-        getTouTiaoLiveData()
-        getGitHubRepo()
+
+        //getTouTiao()
+        //getTouTiaoLiveData()
+        //getGitHubRepo()
+
+        testJosn()
+    }
+
+    private fun testJosn() {
+        val gson = Gson()
+        val s =
+            "{\"hostSearch\":[{\"advertImg\":\"\",\"advertType\":\"html5\",\"advertParam\":\"546456546\",\"advertTargetId\":\"\",\"advertSecondTargetId\":\"\",\"advertExtend\":{},\"advertStyle\":\"\",\"advertTitle\":\"54645645645645645\",\"advertTable\":\"search_word\",\"advertShowNavTitle\":\"\",\"id\":74,\"keyword\":\"54645645645645645\",\"image\":\"\",\"searchWordSpecialStyle\":{\"fontColor\":\"#D92B3A\",\"fontColorClarity\":100.0,\"backgroundColor\":\"#1AD92B3A\",\"backgroundColorClarity\":0.1}}]}"
+        val fromJson = gson.fromJson<TestBean>(s, TestBean::class.java)
+        println(fromJson)
     }
 
     private fun getTouTiao() {
