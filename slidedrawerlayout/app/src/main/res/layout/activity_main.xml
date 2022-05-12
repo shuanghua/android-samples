@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.sample.slidedrawerlayout.widget.SlideDrawerContainer xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/slideLayout"
+    android:fitsSystemWindows="true"
+    tools:context=".MainActivity">
+    
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#73E176">
+
+        <TextView
+            android:id="@+id/open"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:text="左滑或者点击打开 Drawer>"
+            android:textAppearance="@style/TextAppearance.AppCompat.Title" />
+    </FrameLayout>
+
+
+    <!-- The navigation drawer that comes from the left -->
+    <!-- Note that `android:layout_gravity` needs to be set to 'start' -->
+    <FrameLayout
+        android:id="@+id/nvView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#7853B8">
+
+        <TextView
+            android:id="@+id/close"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:text="👈右滑或点击关闭 Drawer"
+            android:textAppearance="@style/TextAppearance.AppCompat.Title" />
+    </FrameLayout>
+
+</com.sample.slidedrawerlayout.widget.SlideDrawerContainer>
