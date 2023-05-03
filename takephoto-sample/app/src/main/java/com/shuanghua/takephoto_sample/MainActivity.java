@@ -41,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
         mButton = findViewById(R.id.button);
         mButton.setOnClickListener(view -> {
             MainActivityPermissionsDispatcher.takePhotoWithPermissionCheck(this); // 第四步
-//            pickPhotoFromGallery();
+            //pickPhotoFromGallery();
         });
     }
 
@@ -85,6 +85,7 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * 采样压缩 （不需要加载原图到内存）
+     * 不能指定最后输出的分辨率
      * inSampleSize = 1，采样后的图片大小为原始大小
      * inSampleSize < 1，也按照 1 来计算
      * inSampleSize > 1，即采样后的图片将缩小，缩小比例为 1 / ( inSampleSize 的二次方 )
@@ -95,7 +96,7 @@ public class MainActivity extends AppCompatActivity {
         BitmapFactory.decodeStream(getContentResolver().openInputStream(imgUri), null, options);
         int width_tmp = options.outWidth;
         int height_tmp = options.outHeight;
-        System.out.println("采样前：" + options.outWidth + " x " + options.outHeight + ", size: ");
+        System.out.println("采样前：" + width_tmp + " x " + height_tmp + ", size: " + options.inDensity);
         int scale = 2;
         while (true) {
             if (width_tmp / scale < SCREEN_WIDTH) break;
@@ -114,13 +115,15 @@ public class MainActivity extends AppCompatActivity {
      * 矩阵压缩（需要先加载原图到内存）
      */
     private Bitmap matrixImg(Uri imgUri) throws FileNotFoundException {
+
         Bitmap bitmap = BitmapFactory.decodeStream(getContentResolver().openInputStream(imgUri));
-        System.out.println("缩放前：" + bitmap.getByteCount());
+        System.out.println("Matrix前：" + bitmap.getWidth() + " x " + bitmap.getHeight() + ", size: " + bitmap.getByteCount());
+
         Matrix matrix = new Matrix();
-        matrix.setScale(0.25f, 0.25f);//数越小，压缩越狠
-        Bitmap bm = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth()
-                , bitmap.getHeight(), matrix, true);
-        System.out.println("缩放后：" + bm.getByteCount());
+        matrix.setScale(1200f / bitmap.getWidth(), 1200f / bitmap.getHeight());//数越小，压缩越狠
+        Bitmap bm = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+
+        System.out.println("Matrix后：" + bm.getWidth() + " x " + bm.getHeight() + ", size: " + bm.getByteCount());
         return bm;
     }
 
@@ -154,8 +157,8 @@ public class MainActivity extends AppCompatActivity {
                 case REQUEST_TAKE_PHOTO_CAMERA:
                     try {
                         Uri imgUri = Uri.fromFile(imgFile); // File to Uri
-                        //Bitmap bitmap = matrixImg(imgUri);
-                        Bitmap bitmap = optionsImg(imgUri);
+                        Bitmap bitmap = matrixImg(imgUri);
+                        //Bitmap bitmap = optionsImg(imgUri);
                         saveBitmapToSDCard(bitmap);
                         //Bitmap photo = data.getParcelableExtra("data");// 获取系统压缩过后的图片（压缩后的图片特别小, 大概 2cm X 3cm）
                         mImageView.setImageBitmap(bitmap);
