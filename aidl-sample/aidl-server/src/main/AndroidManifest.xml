@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="dev.shuanghua.aidl.server">
+
+    <queries>
+        <package android:name="dev.shuanghua.aidl.client" />
+        <intent>
+            <action android:name="dev.shuanghua.aidl.IAppInterface" />
+        </intent>
+    </queries>
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.Aidlclient"
+        >
+
+        <!-- enabled 允许被系统进程实例化 -->
+        <!-- exported 允许被隐式调用 -->
+        <!-- 该服务是让别的App调用的,例如模拟 微信登录 登录 -->
+        <service
+            android:name="dev.shuanghua.aidl.server.ServerService"
+            android:enabled="true"
+            android:exported="true"
+            android:process=":server_login"
+            >
+            <intent-filter>
+                <action android:name="dev.shuanghua.aidl.IAppInterface" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+
+        </service>
+<!-- ============================================================================ activity -->
+        <activity
+            android:name="dev.shuanghua.aidl.server.MainActivity"
+            android:exported="true"
+            >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value=""
+                />
+        </activity>
+
+        <activity
+            android:name="dev.shuanghua.aidl.server.ServerLoginMainActivity"
+            android:exported="true"
+            />
+    </application>
+
+</manifest>
