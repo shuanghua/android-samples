@@ -100,27 +100,4 @@ class MainActivityKotlin : AppCompatActivity() {
             insets
         }
     }
-
-    @Throws(FileNotFoundException::class)
-    private fun optionsImg(imgUri: Uri): Bitmap {
-        val options = BitmapFactory.Options()
-        options.inJustDecodeBounds = true // BitmapFactory.decodeStream 会返回 null ，不会真正加载 bitmap 到内存中
-        BitmapFactory.decodeStream(contentResolver.openInputStream(imgUri), null, options)
-        val width_tmp = options.outWidth
-        val height_tmp = options.outHeight
-        println("采样前：" + width_tmp + " x " + height_tmp + ", size: " + options.inDensity)
-        var scale = 2
-        while (true) {
-            if (width_tmp / scale < SCREEN_WIDTH) break
-            scale += 2
-        }
-        options.inSampleSize = scale / 2
-        options.inJustDecodeBounds = false
-        val bm = BitmapFactory.decodeStream(
-            contentResolver.openInputStream(imgUri), null, options
-        )
-
-        println("采样后：" + options.outWidth + " x " + options.outHeight + ", size: " + bm!!.byteCount)
-        return bm
-    }
 }
