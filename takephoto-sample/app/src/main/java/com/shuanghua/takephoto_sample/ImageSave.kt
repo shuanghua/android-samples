@@ -123,7 +123,7 @@ fun saveImageToExternalFilesDir(
  * @return 图片的 Bitmap 形式
  */
 @Throws(IOException::class)
-fun getImage(activity: Activity, imageName: String): Bitmap? {
+fun getImageFromSharedPictures(activity: Activity, imageName: String): Bitmap? {
     var uri: Uri? = null
 
     val projection = arrayOf( // 需要的信息，例如图片的所在数据库表对应的 ID，图片在数据库中的名字

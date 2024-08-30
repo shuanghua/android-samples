@@ -109,8 +109,8 @@ fun AppCompatActivity.takePictureFromCameraSample(takePictureLauncher: ActivityR
             imgFile
         ) //.fileProvider 也可以改成别的,只是一个标识而已
     }
-    val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-    intent.putExtra(MediaStore.EXTRA_OUTPUT, imgUri) // 这会获取拍照的原图 (如不需要原图则将该行注释掉)
+//    val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+//    intent.putExtra(MediaStore.EXTRA_OUTPUT, imgUri) // 这会获取拍照的原图 (如不需要原图则将该行注释掉)
 //    startActivityForResult(intent, 100) // 启动相机拍照，(已经过时)
     takePictureLauncher.launch(imgUri) // 启动相机拍照，并将图片保存到 uri
 }
