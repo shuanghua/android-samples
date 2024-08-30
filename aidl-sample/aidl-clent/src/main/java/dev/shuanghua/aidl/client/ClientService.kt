@@ -13,7 +13,8 @@ class ClientService : Service() {
 
     private val conn = object : ServiceConnection {
         override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
-            callBackService = (service as ClientMainActivity.CallBackService.CallBackBinder).getService()
+            callBackService =
+                (service as ClientMainActivity.CallBackService.CallBackBinder).getService()
         }
 
         override fun onServiceDisconnected(name: ComponentName?) {
@@ -23,7 +24,7 @@ class ClientService : Service() {
     }
 
     override fun onBind(intent: Intent): IBinder? {
-        return if (IAppInterface::class.java.name.equals(intent.action)) {
+        return if (IAppInterface::class.java.name == intent.action) {
             binder
         } else {
             null

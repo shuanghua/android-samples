@@ -3,7 +3,11 @@ package dev.shuanghua.aidl.server
 import android.content.ComponentName
 import android.content.Intent
 import android.content.ServiceConnection
-import android.os.*
+import android.os.Bundle
+import android.os.Handler
+import android.os.IBinder
+import android.os.Looper
+import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import dev.shuanghua.aidl.IAppInterface
 import kotlin.concurrent.thread
@@ -18,7 +22,9 @@ class ServerLoginMainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main_server)
 
         bindClient()
-        sendLoginStatusToClient()
+        findViewById<Button>(R.id.login_ok).setOnClickListener {
+            sendLoginStatusToClient()
+        }
     }
 
     private val conn = object : ServiceConnection {
@@ -41,7 +47,6 @@ class ServerLoginMainActivity : AppCompatActivity() {
         }.also {
             val s = bindService(it, conn, BIND_AUTO_CREATE)
             if (s) println("绑定client成功") else println("绑定client失败")
-
         }
     }
 
@@ -51,7 +56,6 @@ class ServerLoginMainActivity : AppCompatActivity() {
         thread {
             handler.postDelayed({
                 clientBinder?.loginStatus(true)
-                finish()
             }, 2000)
         }
     }

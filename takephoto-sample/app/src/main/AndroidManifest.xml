@@ -4,7 +4,9 @@
     <uses-feature
         android:name="android.hardware.camera"
         android:required="false" />
+
     <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -13,9 +15,17 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Takephotosample">
+        <activity
+            android:name=".MainActivityKotlin"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
-        <!--    support        android:name="android.support.v4.content.FileProvider"-->
-        <!--适配7.0+拍照返回 Start-->
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <!-- support        android:name="android.support.v4.content.FileProvider" -->
+        <!-- 适配7.0+拍照返回 Start -->
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.fileProvider"
@@ -24,18 +34,11 @@
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/provider_path" />
-        </provider>
-        <!--适配7.0+拍照返回 End-->
+        </provider> <!-- 适配7.0+拍照返回 End -->
 
         <activity
-            android:name=".MainActivity"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+            android:name=".MainActivityJava"
+            android:exported="true"></activity>
     </application>
 
 </manifest>

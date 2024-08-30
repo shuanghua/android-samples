@@ -1,6 +1,5 @@
 package com.shuanghua.takephoto_sample;
 
-import android.Manifest;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -12,7 +11,6 @@ import android.provider.MediaStore;
 import android.widget.Button;
 import android.widget.ImageView;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
 
@@ -21,27 +19,24 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-import permissions.dispatcher.NeedsPermission;
-import permissions.dispatcher.RuntimePermissions;
 
-@RuntimePermissions  //第一步
-public class MainActivity extends AppCompatActivity {
+public class MainActivityJava extends AppCompatActivity {
     private static final int SCREEN_WIDTH = 120;
     public static final int REQUEST_TAKE_PHOTO_CAMERA = 1;
     public static final int REQUEST_TAKE_PHOTO_GALLERY = 2;
     private ImageView mImageView;
-    private Button mButton;
-    File imgFile;
+    private File imgFile;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mImageView = findViewById(R.id.imageView);
-        mButton = findViewById(R.id.button);
+        Button mButton = findViewById(R.id.button1);
+        // 请安装后手动去设置中授予相机权限
         mButton.setOnClickListener(view -> {
-            MainActivityPermissionsDispatcher.takePhotoWithPermissionCheck(this); // 第四步
-            //pickPhotoFromGallery();
+//            pickPhotoFromGallery();
+            takePhoto();
         });
     }
 
@@ -57,8 +52,8 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * Path -> File -> Uri
+     * 需要相机权限
      */
-    @NeedsPermission(Manifest.permission.CAMERA) //第二步
     public void takePhoto() {
         Uri imgUri;
         imgFile = new File(getExternalCacheDir(), "output_image.jpg");// getExternalCacheDir 返回当前应用包名下的 cache 目录路径
@@ -72,7 +67,7 @@ public class MainActivity extends AppCompatActivity {
             }
         }
         if (Build.VERSION.SDK_INT < 24) {
-            imgUri = Uri.fromFile(imgFile);
+            imgUri = Uri.fromFile(imgFile); // file to uri
         } else { // FileProvider
             imgUri = FileProvider.getUriForFile(this, getPackageName() + ".fileProvider", imgFile);//.fileProvider 也可以改成别的,只是一个标识而已
         }
@@ -115,7 +110,6 @@ public class MainActivity extends AppCompatActivity {
      * 矩阵压缩（需要先加载原图到内存）
      */
     private Bitmap matrixImg(Uri imgUri) throws FileNotFoundException {
-
         Bitmap bitmap = BitmapFactory.decodeStream(getContentResolver().openInputStream(imgUri));
         System.out.println("Matrix前：" + bitmap.getWidth() + " x " + bitmap.getHeight() + ", size: " + bitmap.getByteCount());
 
@@ -157,7 +151,7 @@ public class MainActivity extends AppCompatActivity {
                 case REQUEST_TAKE_PHOTO_CAMERA:
                     try {
                         Uri imgUri = Uri.fromFile(imgFile); // File to Uri
-                        Bitmap bitmap = matrixImg(imgUri);
+                        Bitmap bitmap = optionsImg(imgUri);
                         //Bitmap bitmap = optionsImg(imgUri);
                         saveBitmapToSDCard(bitmap);
                         //Bitmap photo = data.getParcelableExtra("data");// 获取系统压缩过后的图片（压缩后的图片特别小, 大概 2cm X 3cm）
@@ -177,12 +171,5 @@ public class MainActivity extends AppCompatActivity {
                     break;
             }
         }
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode
-            , @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        MainActivityPermissionsDispatcher.onRequestPermissionsResult(this, requestCode, grantResults); //第三步
     }
 }

@@ -45,7 +45,7 @@ class ClientMainActivity : AppCompatActivity(){
     ) : Service() {
 
         private val binder = CallBackBinder()
-        override fun onBind(intent: Intent?): IBinder? {
+        override fun onBind(intent: Intent?): IBinder {
             return binder
         }
 
@@ -87,6 +87,8 @@ class ClientMainActivity : AppCompatActivity(){
      */
     private val conn = object : ServiceConnection {
         override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
+            // 这里返回的实际是: new IAppInterface.Stub.Proxy(obj)
+            // 所以 asInterface 获取到的是 Binder 代理对象
             serverBinder = IAppInterface.Stub.asInterface(service)
             service?.let { isBindServer = true }
         }
@@ -103,7 +105,7 @@ class ClientMainActivity : AppCompatActivity(){
     private fun bindWeChatLoginService() {
         val intent = Intent()
         intent.action = IAppInterface::class.java.name  // (必须)
-        intent.`package` = "dev.shuanghua.aidl.server"// (必须) 服务端 Service 类 报名
+        intent.`package` = "dev.shuanghua.aidl.server"// (必须) 服务端 Service 类 包名
         val s = bindService(intent, conn, BIND_AUTO_CREATE) // 绑定时自动启动对应的服务, 调用后,上面的连接就会触发
         if (s) println("绑定成功") else println("绑定失败")
     }
