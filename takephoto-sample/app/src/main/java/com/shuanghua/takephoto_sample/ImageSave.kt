@@ -12,6 +12,7 @@
 package com.shuanghua.takephoto_sample
 
 import android.app.Activity
+import android.content.ContentResolver
 import android.content.ContentUris
 import android.content.ContentValues
 import android.content.Context
