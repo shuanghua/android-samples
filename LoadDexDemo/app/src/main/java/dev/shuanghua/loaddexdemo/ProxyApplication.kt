@@ -50,19 +50,24 @@ class ProxyApplication : Application() {
         )
 
         //替换mClassLoader
+        // 获取 ActivityThread 实例
         currentActivityThread = Ref.invokeStaticMethod(
             "android.app.ActivityThread",
             "currentActivityThread",
             null,
             null
         )
+        // 通过 ActivityThread 获取 mPackages实例
         val mPackages = Ref.getFieldObject(
             "android.app.ActivityThread",
             currentActivityThread,
             "mPackages"
         ) as ArrayMap<*, *>
 
+        // 获取 loadedApk 实例
         loadedApk = (mPackages[packageName] as WeakReference<*>?)!!.get()
+
+        // 将用来加载我们自己 dex 文件的 DexClassLoader 替换到 loadedApk 中
         Ref.setFieldObject(
             "android.app.LoadedApk",
             "mClassLoader",
